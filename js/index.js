@@ -1,6 +1,7 @@
 $().ready(
     function () {
 
+        //点击切换页面
         $('header .col-md-5 .col-md-3').each(function (index,t) {
 
             $(t).on('click',function () {
@@ -12,45 +13,35 @@ $().ready(
         });
         //鼠标滚动事件
         window.addEventListener('mousewheel',function () {
+            var pages = $('.page');
             var current;
-            // console.log(event.wheelDelta);
+
             if (event.wheelDelta === -120){
             //    向下滚动,
-                $('.container .container-fluid').each(function (index,t) {
-                    if ($(t).css('display') !== 'none' && index < $('.container .container-fluid').length){
+                pages.each(function (index,t) {
+                    if ($(t).css('display') !== 'none' && index < pages.length){
                         current = index+1;
                     }
                 });
-                $('.container .container-fluid').eq(current).slideDown(500).siblings('.container-fluid').slideUp(500);
-                console.log(current);
+
+                //如果没有动画，则翻页
+                if (!pages.eq(current-1).is(':animated')&&!pages.eq(current+1).is(':animated')){
+                    pages.eq(current).slideDown(500).siblings('.page').slideUp(500);
+                }
 
             }
             else if (event.wheelDelta === 120){
             //    向上滚动
-                $('.container .container-fluid').each(function (index,t) {
+                pages.each(function (index,t) {
                     if ($(t).css('display') !== 'none' && index >0){
                         current = index-1
                     }
                 });
-                $('.container .container-fluid').eq(current).slideDown(500).siblings('.container-fluid').slideUp(500);
+                //如果没有动画，则翻页
+                if (!pages.eq(current-1).is(':animated')&&!pages.eq(current+1).is(':animated')){
+                    pages.eq(current).slideDown(500).siblings('.page').slideUp(500);
+                }
             }
         })
     }
 );
-function scroll() {
-    var lastScrollTop = 0;
-    $(window).scroll(function(event){
-        var st = $(this).scrollTop();
-        if (st > lastScrollTop){
-            // downscroll code
-            $('.container .container-fluid').each(function (index,t) {
-                if (t.display !== 'none' || index < $('.container .container-fluid').length){
-                    $('.container .container-fluid').eq(index+1).slideDown(500).siblings('.container-fluid').slideUp(500)
-                }
-            })
-        } else {
-            // upscroll code
-        }
-        lastScrollTop = st;
-    });
-}
